@@ -1,0 +1,30 @@
+[project]
+name = "moment-structure"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "matplotlib>=3.11.2",
+    "numpy>=2.0",
+    "umap-learn>=0.5.12",
+]
+
+[project.optional-dependencies]
+gpu = [
+    "cuml-cu13>=26.10 ; sys_platform == 'linux'",
+]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.4.0",
+    "nbconvert>=7.17.2",
+]
+
+[tool.uv]
+# 手元の Mac と GPU サーバー（Linux x86_64）だけを対象に lock する
+index-strategy = "unsafe-best-match"  # NVIDIA と PyPI の両方から最適なバージョンを選ぶ
+environments = ["sys_platform == 'darwin'", "sys_platform == 'linux' and platform_machine == 'x86_64'"]
+
+# cuML などの RAPIDS パッケージは NVIDIA の index から取得する（PyPI 上のものは中身のない stub）
+[[tool.uv.index]]
+name = "nvidia"
+url = "https://pypi.nvidia.com"
